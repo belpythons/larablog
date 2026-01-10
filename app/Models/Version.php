@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\PillarType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class Version extends Model
 {
@@ -16,6 +18,35 @@ class Version extends Model
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);
+    }
+
+    /**
+     * Get the changelog for this version (all related posts).
+     * Returns posts grouped by pillar type for organized changelog display.
+     * 
+     * @return Collection<string, Collection<int, Post>>
+     */
+    public function getChangelogAttribute(): Collection
+    {
+        return $this->posts()
+            ->published()
+            ->orderByDesc('published_at')
+            ->get(['posts.id', 'posts.title', 'posts.slug', 'posts.pillar', 'posts.published_at', 'posts.excerpt'])
+            ->groupBy(fn(Post $post) => $post->pillar->value);
+    }
+
+    /**
+     * Get the release notes for this version (Ecosystem posts only).
+     * 
+     * @return Collection<int, Post>
+     */
+    public function getReleaseNotesAttribute(): Collection
+    {
+        return $this->posts()
+            ->published()
+            ->ofPillar(PillarType::Ecosystem)
+            ->orderByDesc('published_at')
+            ->get(['posts.id', 'posts.title', 'posts.slug', 'posts.published_at', 'posts.excerpt']);
     }
 
     /**
