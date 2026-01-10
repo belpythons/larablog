@@ -30,6 +30,7 @@
 }
 
 @layer components {
+
     /* Interactive Links in Prose Content */
     .prose a {
         @apply text-blue-600 font-medium no-underline relative;
@@ -124,9 +125,99 @@
     .callout-info {
         @apply bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg;
     }
+
+    /* ========================================
+       Neo-Brutalist Design System
+       ======================================== */
+
+    /* Brutalist Card */
+    .card-brutal {
+        @apply bg-white border-2 border-black;
+        @apply shadow-brutal transition-all duration-150;
+    }
+
+    .card-brutal:hover {
+        @apply translate-x-0.5 translate-y-0.5 shadow-none;
+    }
+
+    .card-brutal-static {
+        @apply bg-white border-2 border-black shadow-brutal;
+    }
+
+    /* Brutalist Buttons */
+    .btn-brutal {
+        @apply inline-flex items-center justify-center gap-2;
+        @apply px-6 py-3 font-mono font-bold uppercase tracking-wider;
+        @apply bg-white border-2 border-black shadow-brutal;
+        @apply transition-all duration-150 cursor-pointer;
+    }
+
+    .btn-brutal:hover {
+        @apply translate-x-0.5 translate-y-0.5 shadow-none;
+    }
+
+    .btn-brutal-primary {
+        @apply btn-brutal bg-brutal-yellow;
+    }
+
+    .btn-brutal-dark {
+        @apply btn-brutal bg-black text-white;
+    }
+
+    .btn-brutal-sm {
+        @apply btn-brutal px-4 py-2 text-sm shadow-brutal-sm;
+    }
+
+    /* Brutalist Input */
+    .input-brutal {
+        @apply w-full px-4 py-3 font-mono;
+        @apply border-2 border-black bg-white;
+        @apply focus:outline-none focus:ring-0 focus:shadow-brutal-sm;
+        @apply placeholder:text-gray-400;
+        @apply transition-shadow duration-150;
+    }
+
+    /* Brutalist Badge */
+    .badge-brutal {
+        @apply inline-flex items-center px-3 py-1;
+        @apply font-mono text-xs font-bold uppercase tracking-wider;
+        @apply border-2 border-black bg-white;
+    }
+
+    .badge-brutal-sm {
+        @apply badge-brutal px-2 py-0.5 text-[10px];
+    }
+
+    /* Brutalist Link */
+    .link-brutal {
+        @apply font-mono underline decoration-2 underline-offset-4 decoration-black;
+        @apply hover:bg-brutal-yellow transition-colors;
+    }
+
+    /* Additional Button Variants */
+    .btn-brutal-secondary {
+        @apply btn-brutal bg-gray-100 text-gray-800;
+    }
+
+    .btn-brutal-danger {
+        @apply btn-brutal bg-red-500 text-white border-red-700;
+    }
+
+    .btn-brutal-danger:hover {
+        @apply bg-red-600;
+    }
+
+    .btn-brutal-ghost {
+        @apply btn-brutal bg-transparent border-white/30 text-gray-400;
+    }
+
+    .btn-brutal-ghost:hover {
+        @apply border-white text-white;
+    }
 }
 
 @layer utilities {
+
     /* Hide scrollbar but keep functionality */
     .scrollbar-hide {
         -ms-overflow-style: none;
@@ -168,44 +259,68 @@
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 
     @keyframes slideUp {
-        from { 
-            opacity: 0; 
-            transform: translateY(20px); 
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
-        to { 
-            opacity: 1; 
-            transform: translateY(0); 
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 
     @keyframes scaleIn {
-        from { 
-            opacity: 0; 
-            transform: scale(0.95); 
+        from {
+            opacity: 0;
+            transform: scale(0.95);
         }
-        to { 
-            opacity: 1; 
-            transform: scale(1); 
+
+        to {
+            opacity: 1;
+            transform: scale(1);
         }
     }
 
     /* Stagger animation children */
-    .stagger-children > * {
+    .stagger-children>* {
         opacity: 0;
         animation: slideUp 0.5s ease-out forwards;
     }
 
-    .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
-    .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
-    .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
-    .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
-    .stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
-    .stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+    .stagger-children>*:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .stagger-children>*:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .stagger-children>*:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .stagger-children>*:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .stagger-children>*:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    .stagger-children>*:nth-child(6) {
+        animation-delay: 0.6s;
+    }
 
     /* Alpine.js cloak */
     [x-cloak] {
