@@ -9,6 +9,7 @@ use App\Filament\Resources\TechStacks\Schemas\TechStackForm;
 use App\Filament\Resources\TechStacks\Tables\TechStacksTable;
 use App\Models\TechStack;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class TechStackResource extends Resource
 {
     protected static ?string $model = TechStack::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCpuChip;
+
+    protected static UnitEnum|string|null $navigationGroup = 'References';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
 
