@@ -1,7 +1,8 @@
 @props(['currentVersion' => null])
 
 <div x-data="spotlightSearch()" x-init="init()" x-show="open" x-cloak @keydown.window.prevent.cmd.k="open = true"
-    @keydown.window.prevent.ctrl.k="open = true" @keydown.escape.window="open = false" class="fixed inset-0 z-[100]"
+    @keydown.window.prevent.ctrl.k="open = true" @keydown.escape.window="open = false"
+    @toggle-spotlight.window="open = !open" class="fixed inset-0 z-[100]"
     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
@@ -207,7 +208,13 @@
             goToSelected() {
                 const item = this.allItems[this.selectedIndex];
                 if (item?.url) {
-                    window.location.href = item.url;
+                    // Use Livewire navigate for SPA experience
+                    if (typeof Livewire !== 'undefined' && Livewire.navigate) {
+                        Livewire.navigate(item.url);
+                    } else {
+                        window.location.href = item.url;
+                    }
+                    this.open = false;
                 }
             }
         };

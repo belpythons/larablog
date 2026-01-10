@@ -9,6 +9,7 @@ use App\Filament\Resources\Components\Schemas\ComponentForm;
 use App\Filament\Resources\Components\Tables\ComponentsTable;
 use App\Models\Component;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +19,11 @@ class ComponentResource extends Resource
 {
     protected static ?string $model = Component::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCube;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Content';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 

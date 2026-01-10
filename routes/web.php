@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 
 Route::get('/', function () {
-    return redirect('/blog');
-});
+    return view('welcome');
+})->name('home');
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 
@@ -16,6 +16,11 @@ Route::prefix('docs')->group(function () {
     Route::get('/', function () {
         return redirect()->route('blog.index');
     });
+
+    // Changelog route for Living Documentation
+    Route::get('/{version}/changelog', [BlogController::class, 'changelog'])
+        ->where('version', 'v[0-9]+(\\.x)?')
+        ->name('docs.changelog');
 
     Route::get('/{version}/{category}/{slug}', [PostController::class, 'show'])
         ->where([

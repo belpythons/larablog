@@ -5,10 +5,12 @@ namespace App\Filament\Resources\Versions;
 use App\Filament\Resources\Versions\Pages\CreateVersion;
 use App\Filament\Resources\Versions\Pages\EditVersion;
 use App\Filament\Resources\Versions\Pages\ListVersions;
+use App\Filament\Resources\Versions\RelationManagers\PostsRelationManager;
 use App\Filament\Resources\Versions\Schemas\VersionForm;
 use App\Filament\Resources\Versions\Tables\VersionsTable;
 use App\Models\Version;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -18,7 +20,11 @@ class VersionResource extends Resource
 {
     protected static ?string $model = Version::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
+
+    protected static UnitEnum|string|null $navigationGroup = 'References';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -35,7 +41,7 @@ class VersionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PostsRelationManager::class,
         ];
     }
 
