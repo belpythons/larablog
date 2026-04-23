@@ -10,7 +10,7 @@
                 
                 <!-- Brutalist Breadcrumb -->
                 <nav class="font-mono text-xs text-gray-500 mb-6 uppercase tracking-widest">
-                    <a href="{{ route('blog.index') }}" wire:navigate
+                    <a href="{{ route('home') }}" wire:navigate
                         class="hover:bg-brutal-yellow transition-colors px-1">HOME</a>
                     <span class="mx-1">/</span>
                     <span>{{ $currentVersion->name }}</span>
@@ -31,13 +31,12 @@
 
                     {{-- Brutalist Badges --}}
                     <div class="flex flex-wrap items-center gap-2 mb-4">
-                        <span class="badge-brutal bg-brutal-yellow">{{ $post->pillar->getLabel() }}</span>
-                        @foreach($post->techStacks as $stack)
-                            <span class="badge-brutal-sm bg-gray-100">{{ $stack->name }}</span>
-                        @endforeach
-                        @foreach($post->versions as $v)
-                            <span class="badge-brutal-sm bg-brutal-purple text-white border-brutal-purple">{{ $v->name }}</span>
-                        @endforeach
+                        <span class="badge-brutal bg-brutal-yellow">{{ strtoupper($post->pillar->value ?? 'BASICS') }}</span>
+                        @if(isset($post->techStacks))
+                            @foreach($post->techStacks as $stack)
+                                <span class="badge-brutal-sm bg-gray-100">{{ $stack->name }}</span>
+                            @endforeach
+                        @endif
                     </div>
 
                     {{-- Meta Information (Git-style) --}}
@@ -291,12 +290,7 @@
 
                     {{-- Related Articles --}}
                     @php
-                        $relatedPosts = \App\Models\Post::where('id', '!=', $post->id)
-                            ->where('pillar', $post->pillar)
-                            ->published()
-                            ->latest('published_at')
-                            ->take(3)
-                            ->get();
+                        $relatedPosts = collect([]); // Related posts logic removed for flat-file
                     @endphp
                     @if($relatedPosts->count() > 0)
                         <div class="border-2 border-black bg-white shadow-brutal p-4">
@@ -305,7 +299,7 @@
                             </h3>
                             <div class="space-y-3">
                                 @foreach($relatedPosts as $related)
-                                    <a href="{{ route('docs.show', ['version' => $currentVersion->slug, 'category' => $related->pillar->value, 'slug' => $related->slug]) }}"
+                                    <a href="{{ route('post.show', ['slug' => $related->slug]) }}"
                                        wire:navigate
                                        class="block group">
                                         <p class="text-sm font-bold text-black group-hover:underline line-clamp-2">
@@ -332,10 +326,10 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-500">Updated:</span>
-                                <span>{{ $post->updated_at->format('M d, Y') }}</span>
+                                <span>{{ $post->published_at?->format('M d, Y') }}</span>
                             </div>
                         </div>
-                        <a href="{{ route('docs.changelog', $currentVersion->slug) }}" 
+                        <a href="#" 
                            wire:navigate
                            class="block mt-4 text-center px-4 py-2 border-2 border-black bg-black text-white text-xs font-bold uppercase
                                   hover:bg-brutal-yellow hover:text-black transition-colors">

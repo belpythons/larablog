@@ -53,7 +53,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 {{-- Logo --}}
-                <a href="{{ route('blog.index') }}" wire:navigate class="flex items-center gap-3 group">
+                <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-3 group">
                     <div class="w-10 h-10 bg-black flex items-center justify-center">
                         <span class="text-white font-bold text-lg">L</span>
                     </div>
@@ -127,7 +127,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-between gap-6 text-center sm:text-left">
                 <div class="flex items-center gap-3">
-                    <span class="text-3xl font-bold">{{ $posts->total() }}</span>
+                    <span class="text-3xl font-bold">{{ $posts->count() }}</span>
                     <span class="text-xs uppercase tracking-widest text-gray-500">// DOCS</span>
                 </div>
                 <div class="flex items-center gap-3">
@@ -173,7 +173,7 @@
 
                         {{-- Post Card - Uniform Height --}}
                         <article class="group h-full">
-                            <a href="{{ route('docs.show', ['version' => 'v11.x', 'category' => $post->pillar->value, 'slug' => $post->slug]) }}"
+                            <a href="{{ route('post.show', ['slug' => $post->slug]) }}"
                                wire:navigate 
                                class="card-brutal flex flex-col h-full bg-white border-l-4 {{ $borderAccent }} 
                                       hover:translate-x-1 hover:translate-y-1 hover:shadow-none
@@ -246,21 +246,16 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        @foreach(\App\Models\TechStack::all() as $stack)
+                        @foreach(['Laravel', 'Livewire', 'Tailwind CSS'] as $stack)
                             <span class="px-4 py-2 bg-black text-white border-2 border-black text-sm font-medium
                                         hover:bg-white hover:text-black transition-colors duration-150">
-                                {{ $stack->name }}
+                                {{ $stack }}
                             </span>
                         @endforeach
                     </div>
                 </div>
 
-                {{-- Pagination --}}
-                @if($posts->hasPages())
-                    <div class="mt-16 flex justify-center">
-                        {{ $posts->links() }}
-                    </div>
-                @endif
+                {{-- Pagination (Removed for flat files) --}}
             @else
                 <div class="card-brutal-static text-center py-16 px-8">
                     <div class="text-6xl mb-4">📄</div>

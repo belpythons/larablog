@@ -73,9 +73,7 @@
                         <ul class="space-y-1">
                             @foreach($stack['posts'] ?? [] as $item)
                                 @php
-                                    $itemUrl = route('docs.show', [
-                                        'version' => $currentVersion?->slug ?? 'v11.x',
-                                        'category' => $item['pillar'] ?? 'ecosystem',
+                                    $itemUrl = route('post.show', [
                                         'slug' => $item['slug'] ?? ''
                                     ]);
                                 @endphp
@@ -108,7 +106,7 @@
                     </button>
                     
                     {{-- Logo --}}
-                    <a href="{{ route('blog.index') }}" wire:navigate class="flex items-center gap-3">
+                    <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-black flex items-center justify-center">
                             <span class="text-white font-bold text-lg">L</span>
                         </div>
@@ -124,7 +122,7 @@
                             class="font-mono text-sm border-2 border-black px-3 py-2 bg-white focus:outline-none focus:shadow-brutal-sm cursor-pointer hidden sm:block"
                             onchange="window.location.href = this.value">
                             @foreach($versions as $v)
-                                <option value="{{ route('docs.changelog', $v->slug) }}" {{ ($currentVersion?->id ?? 0) === $v->id ? 'selected' : '' }}>
+                                <option value="#" {{ ($currentVersion?->slug ?? '') === $v->slug ? 'selected' : '' }}>
                                     {{ $v->name }}
                                 </option>
                             @endforeach
@@ -157,9 +155,7 @@
                         <ul class="space-y-1">
                             @foreach($stack['posts'] ?? [] as $item)
                                 @php
-                                    $itemUrl = route('docs.show', [
-                                        'version' => $currentVersion?->slug ?? 'v11.x',
-                                        'category' => $item['pillar'] ?? 'ecosystem',
+                                    $itemUrl = route('post.show', [
                                         'slug' => $item['slug'] ?? ''
                                     ]);
                                 @endphp

@@ -18,11 +18,11 @@
 
         {{-- Navigation Links --}}
         <nav class="p-6 space-y-0">
-            <a href="{{ route('blog.index') }}" wire:navigate @click="open = false" class="block text-2xl font-bold font-mono py-4 border-b-2 border-black 
+            <a href="{{ route('home') }}" wire:navigate @click="open = false" class="block text-2xl font-bold font-mono py-4 border-b-2 border-black 
                       hover:bg-brutal-yellow transition-colors px-4 -mx-4">
                 → HOME
             </a>
-            <a href="{{ route('blog.index') }}#posts" wire:navigate @click="open = false" class="block text-2xl font-bold font-mono py-4 border-b-2 border-black 
+            <a href="{{ route('home') }}#posts" wire:navigate @click="open = false" class="block text-2xl font-bold font-mono py-4 border-b-2 border-black 
                       hover:bg-brutal-yellow transition-colors px-4 -mx-4">
                 → BLOG
             </a>

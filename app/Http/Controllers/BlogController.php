@@ -2,32 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\TechStack;
-use App\Models\Version;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Cache;
+use App\Services\PostService;
 
 class BlogController extends Controller
 {
+    protected PostService $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     public function index(): View
     {
-        // Optimized query with specific columns and eager loading
-        $posts = Post::query()
-            ->select(['id', 'title', 'slug', 'excerpt', 'content_theory', 'pillar', 'user_id', 'component_id', 'published_at'])
-            ->with([
-                'author:id,name',
-                'techStacks:id,name',
-            ])
-            ->published()
-            ->latest('published_at')
-            ->paginate(12);
+        $posts = $this->postService->getAllPosts();
 
-        // Cache stats for 1 hour to avoid N+1 queries in view
-        $stats = Cache::remember('blog.stats', 3600, fn() => [
-            'tech_stacks_count' => TechStack::count(),
-            'versions_count' => Version::stable()->count(),
-        ]);
+        $stats = [
+            'tech_stacks_count' => 0,
+            'versions_count' => 0,
+        ];
 
         return view('blog', [
             'posts' => $posts,
@@ -35,18 +29,19 @@ class BlogController extends Controller
         ]);
     }
 
-    /**
-     * Display the changelog for a specific version (Living Documentation).
-     */
-    public function changelog(string $versionSlug): View
+    public function show(string $slug): View
     {
-        $version = Version::where('slug', $versionSlug)->firstOrFail();
-        $versions = Version::stable()->orderByDesc('slug')->get(['id', 'name', 'slug']);
+        $post = $this->postService->getPostBySlug($slug);
 
-        return view('changelog', [
-            'version' => $version,
-            'versions' => $versions,
-            'changelog' => $version->changelog,
+        if (!$post) {
+            abort(404);
+        }
+
+        return view('posts.show', [
+            'post' => $post,
+            'currentVersion' => (object) ['name' => 'v11.x', 'slug' => 'v11-x'],
+            'versions' => collect([(object) ['name' => 'v11.x', 'slug' => 'v11-x']]),
+            'sidebarData' => collect([])
         ]);
     }
 }
