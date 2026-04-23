@@ -6,8 +6,8 @@
             <div>
                 <h4 class="font-mono text-xs uppercase tracking-widest mb-4 text-gray-500">// NAV</h4>
                 <ul class="space-y-2 text-sm font-mono">
-                    <li><a href="{{ route('blog.index') }}" wire:navigate class="link-brutal">Home</a></li>
-                    <li><a href="{{ route('blog.index') }}#posts" wire:navigate class="link-brutal">Blog</a></li>
+                    <li><a href="{{ route('home') }}" wire:navigate class="link-brutal">Home</a></li>
+                    <li><a href="{{ route('home') }}#posts" wire:navigate class="link-brutal">Blog</a></li>
                     <li><a href="/admin" class="link-brutal">Admin</a></li>
                 </ul>
             </div>
