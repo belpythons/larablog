@@ -29,7 +29,7 @@
             <div class="flex justify-between h-16 items-center">
                 {{-- Logo --}}
                 <div class="flex items-center gap-4">
-                    <a href="{{ route('blog.index') }}" wire:navigate class="flex items-center gap-3 group">
+                    <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-3 group">
                         <div class="w-10 h-10 bg-black flex items-center justify-center">
                             <span class="text-white font-bold text-lg">L</span>
                         </div>
@@ -138,7 +138,7 @@
                                     <div class="flex items-center gap-2 shrink-0">
                                         @if($hasContent)
                                             {{-- Direct Link to Article --}}
-                                            <a href="{{ route('docs.show', ['version' => $version->slug, 'category' => $pillarValue, 'slug' => $post->slug]) }}"
+                                            <a href="{{ route('post.show', ['slug' => $post->slug]) }}"
                                                 wire:navigate class="px-3 py-1.5 border-2 border-black bg-black text-white text-xs font-bold uppercase
                                                                   hover:bg-brutal-yellow hover:text-black transition-colors">
                                                 READ →
@@ -178,7 +178,7 @@
                                             @endif
 
                                             @if($hasContent)
-                                                <a href="{{ route('docs.show', ['version' => $version->slug, 'category' => $pillarValue, 'slug' => $post->slug]) }}"
+                                                <a href="{{ route('post.show', ['slug' => $post->slug]) }}"
                                                     wire:navigate
                                                     class="inline-flex items-center gap-2 mt-4 text-sm font-bold text-black hover:underline">
                                                     Read full documentation
