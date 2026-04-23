@@ -54,9 +54,9 @@
                     <span class="text-brutal-yellow">$</span> ls -la /system/stats/
                 </div>
                 <div class="pl-4 text-gray-400 space-y-1">
-                    <div>drwxr-xr-x articles <span class="text-white">{{ \App\Models\Post::count() }}</span></div>
-                    <div>drwxr-xr-x stacks <span class="text-white">{{ \App\Models\TechStack::count() }}</span></div>
-                    <div>drwxr-xr-x versions <span class="text-white">{{ \App\Models\Version::count() }}</span></div>
+                    <div>drwxr-xr-x articles <span class="text-white">--</span></div>
+                    <div>drwxr-xr-x stacks <span class="text-white">--</span></div>
+                    <div>drwxr-xr-x versions <span class="text-white">--</span></div>
                 </div>
             </div>
 
@@ -72,7 +72,8 @@
                 </a>
 
                 @php
-                    $latestVersion = \App\Models\Version::stable()->orderByDesc('slug')->first();
+                    // Flat-file system dummy data
+                    $latestVersion = (object) ['name' => 'v11.x', 'slug' => 'v11-x'];
                 @endphp
                 @if($latestVersion)
                     <a href="{{ route('docs.changelog', $latestVersion->slug) }}" wire:navigate
@@ -115,7 +116,13 @@
             {{-- Recent Commits (Posts) --}}
             <div class="mt-10 pt-6 border-t border-white/10">
                 <p class="text-xs text-gray-500 mb-4 uppercase tracking-widest">// RECENT_COMMITS</p>
-                @foreach(\App\Models\Post::published()->latest('published_at')->take(3)->get() as $post)
+                @php
+                    $recentPosts = [
+                        (object) ['published_at' => now(), 'pillar' => (object)['value' => 'basics'], 'slug' => 'routing', 'title' => 'Routing Basics'],
+                        (object) ['published_at' => now()->subDays(2), 'pillar' => (object)['value' => 'eloquent'], 'slug' => 'models', 'title' => 'Eloquent Models'],
+                    ];
+                @endphp
+                @foreach($recentPosts as $post)
                     <a href="{{ route('docs.show', ['version' => 'v11.x', 'category' => $post->pillar->value, 'slug' => $post->slug]) }}"
                         wire:navigate
                         class="flex items-start gap-3 py-2 text-sm hover:bg-white/5 -mx-2 px-2 transition-colors group">
@@ -134,7 +141,7 @@
                     class="flex items-center justify-between text-xs text-gray-500 hover:text-white transition-colors">
                     <span>// ALL_VERSIONS</span>
                     <span class="flex items-center gap-2">
-                        @foreach(\App\Models\Version::stable()->orderByDesc('slug')->take(3)->get() as $v)
+                        @foreach([ (object)['name' => 'v11.x'] ] as $v)
                             <span
                                 class="px-2 py-0.5 border border-gray-700 hover:border-brutal-yellow hover:text-brutal-yellow">
                                 {{ $v->name }}

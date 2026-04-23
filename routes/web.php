@@ -1,31 +1,14 @@
 <?php
 
-use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+// Mock routes for flat-file blog
+Route::get('/docs', function () { return 'Docs Index'; })->name('blog.index');
+Route::get('/changelog/{version}', function ($version) { return "Changelog $version"; })->name('docs.changelog');
+Route::get('/docs/{version}/{category}/{slug}', function ($version, $category, $slug) { return "Docs $version $category $slug"; })->name('docs.show');
 
-// Documentation Routes
-Route::prefix('docs')->group(function () {
-    // Redirect /docs to latest version or landing? For now, redirect to blog or specific page
-    Route::get('/', function () {
-        return redirect()->route('blog.index');
-    });
-
-    // Changelog route for Living Documentation
-    Route::get('/{version}/changelog', [BlogController::class, 'changelog'])
-        ->where('version', 'v[0-9]+(\\.x)?')
-        ->name('docs.changelog');
-
-    Route::get('/{version}/{category}/{slug}', [PostController::class, 'show'])
-        ->where([
-            'version' => 'v[0-9]+(\.x)?', // Regex constraint for version structure if needed
-            'category' => 'ecosystem|starter_kit|bricks', // Enforce pillar types
-        ])
-        ->name('docs.show');
-});
+// Flat-file blog routes will be added here
