@@ -1,14 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-// Mock routes for flat-file blog
-Route::get('/docs', function () { return 'Docs Index'; })->name('blog.index');
-Route::get('/changelog/{version}', function ($version) { return "Changelog $version"; })->name('docs.changelog');
-Route::get('/docs/{version}/{category}/{slug}', function ($version, $category, $slug) { return "Docs $version $category $slug"; })->name('docs.show');
-
-// Flat-file blog routes will be added here
+// Langsung ke Landing Page Blog
+Route::get('/', [BlogController::class, 'index'])->name('home');
+Route::get('/belajar/{slug}', [BlogController::class, 'show'])->name('post.show');

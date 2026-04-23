@@ -2,64 +2,59 @@
 
 namespace App\Services;
 
-use App\Models\Post;
+use Illuminate\Support\Facades\File;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class PostService
 {
     /**
-     * Create a new post with related data sync.
+     * Get all posts from markdown files.
      */
-    public function createPost(array $data): Post
+    public function getAllPosts(): Collection
     {
-        $postData = $this->preparePostData($data);
-
-        $post = Post::create($postData);
-
-        $this->syncRelationships($post, $data);
-
-        return $post;
+        return collect(File::files(resource_path('posts')))
+            ->map(function ($file) {
+                return $this->parsePost($file->getPathname());
+            })
+            ->sortBy([
+                ['fase', 'asc'],
+                ['urutan', 'asc']
+            ])
+            ->values();
     }
 
     /**
-     * Update existing post.
+     * Get a single post by slug.
      */
-    public function updatePost(Post $post, array $data): Post
+    public function getPostBySlug(string $slug): ?object
     {
-        $postData = $this->preparePostData($data);
-
-        $post->update($postData);
-
-        $this->syncRelationships($post, $data);
-
-        return $post;
+        return $this->getAllPosts()->firstWhere('slug', $slug);
     }
 
-    protected function preparePostData(array $data): array
+    /**
+     * Parse a single markdown file into an object.
+     */
+    protected function parsePost(string $path): object
     {
-        // Calculate read time or other derived data here if needed
-        return [
-            'title' => $data['title'],
-            'slug' => $data['slug'] ?? Str::slug($data['title']),
-            'pillar' => $data['pillar'],
-            'excerpt' => $data['excerpt'],
-            'content_theory' => $data['content_theory'],
-            'content_technical' => $data['content_technical'],
-            'troubleshooting' => $data['troubleshooting'] ?? null,
-            'published_at' => $data['published_at'],
-            'user_id' => $data['user_id'],
-            'component_id' => $data['component_id'] ?? null,
+        $document = YamlFrontMatter::parseFile($path);
+        
+        return (object) [
+            'title' => $document->title,
+            'description' => $document->description,
+            'slug' => Str::slug($document->title),
+            'fase' => $document->fase,
+            'urutan' => $document->urutan,
+            'content' => $document->body(),
+            'content_theory' => $document->body(),
+            'content_technical' => '',
+            'troubleshooting' => [],
+            'pillar' => (object) ['value' => 'basics'],
+            'techStacks' => collect([]),
+            'author' => (object) ['name' => 'Admin'],
+            'published_at' => now(), // mock
+            'excerpt' => $document->description,
         ];
-    }
-
-    protected function syncRelationships(Post $post, array $data): void
-    {
-        if (isset($data['techStacks'])) {
-            $post->techStacks()->sync($data['techStacks']);
-        }
-
-        if (isset($data['versions'])) {
-            $post->versions()->sync($data['versions']);
-        }
     }
 }
